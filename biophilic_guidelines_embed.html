@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biophilic Design Guidelines for Residential Housing</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --forest:#1A5C38;--moss:#2E8653;--sage:#5A8F6A;--mint:#D6EAD9;--cream:#F7FAF8;
+    --bark:#3D2B1F;--stone:#6B6560;--pebble:#C8C4BE;--sand:#F0EDE8;
+    --gold:#C47A1E;--sky:#2B6089;--terracotta:#8B4A2B;
+    --text:#1A1A1A;--text2:#4A4A4A;--text3:#7A7A7A;--border:#E0DDD8;
+    --gold-lt:#FFF0D4;--sky-lt:#D9ECF7;--terra-lt:#F5E8E0;
+    --radius:10px;--radius-lg:16px;
+  }
+  body{font-family:'Georgia',serif;background:var(--sand);color:var(--text);line-height:1.6;min-height:100vh}
+  
+  .app{max-width:960px;margin:0 auto;padding:0 0 4rem}
+  
+  .hero{background:var(--forest);color:white;padding:2.5rem 2rem 2rem;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;opacity:0.06;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:28px 22px}
+  .hero-tag{font-family:Verdana,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:0.75rem}
+  .hero h1{font-size:1.9rem;font-weight:normal;line-height:1.25;margin-bottom:0.5rem;position:relative}
+  .hero-sub{font-size:0.92rem;color:rgba(255,255,255,0.75);position:relative;max-width:620px}
+  .hero-badge{display:inline-block;margin-top:1.25rem;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:0.3rem 1rem;font-size:0.8rem;color:rgba(255,255,255,0.85);font-family:Verdana,sans-serif}
+
+  .nav-bar{background:white;border-bottom:1px solid var(--border);padding:0 2rem;display:flex;gap:0;overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+  .nav-btn{border:none;background:none;padding:0.9rem 1.1rem;font-size:0.82rem;font-family:Verdana,sans-serif;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;letter-spacing:0.02em}
+  .nav-btn:hover{color:var(--forest)}
+  .nav-btn.active{color:var(--forest);border-bottom-color:var(--forest);font-weight:bold}
+
+  .section{display:none;padding:2rem}
+  .section.active{display:block}
+  .section-intro{font-size:0.95rem;color:var(--text2);max-width:700px;margin-bottom:2rem;line-height:1.7}
+
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem;margin-bottom:2rem}
+  
+  .strategy-card{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transition:box-shadow 0.2s,transform 0.15s}
+  .strategy-card:hover{box-shadow:0 4px 20px rgba(26,92,56,0.12);transform:translateY(-2px)}
+  .strategy-card.expanded{box-shadow:0 4px 24px rgba(26,92,56,0.16)}
+  .card-header{padding:1.25rem 1.25rem 1rem}
+  .card-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;font-size:1.4rem}
+  .card-icon.green{background:var(--mint)}
+  .card-icon.gold{background:var(--gold-lt)}
+  .card-icon.sky{background:var(--sky-lt)}
+  .card-icon.terra{background:var(--terra-lt)}
+  .card-title{font-size:1rem;font-weight:bold;color:var(--forest);margin-bottom:0.3rem}
+  .card-category{font-size:0.72rem;font-family:Verdana,sans-serif;color:var(--stone);text-transform:uppercase;letter-spacing:0.08em}
+  .card-summary{padding:0 1.25rem 1rem;font-size:0.875rem;color:var(--text2);line-height:1.6;border-top:1px solid var(--border);padding-top:0.75rem}
+  .card-footer{padding:0.75rem 1.25rem;background:var(--cream);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .cost-badge{font-size:0.72rem;font-family:Verdana,sans-serif;padding:0.25rem 0.65rem;border-radius:20px;font-weight:bold}
+  .cost-badge.low{background:var(--mint);color:var(--forest)}
+  .cost-badge.med{background:var(--gold-lt);color:#7A4A00}
+  .cost-badge.high{background:#F5E0D6;color:#6B2200}
+  .card-toggle{font-size:0.75rem;color:var(--moss);font-family:Verdana,sans-serif;cursor:pointer;text-decoration:underline}
+  
+  .card-detail{display:none;padding:1.25rem;border-top:2px solid var(--mint);background:var(--cream)}
+  .card-detail.open{display:block}
+  .detail-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+  .detail-box{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
+  .detail-box h4{font-size:0.72rem;font-family:Verdana,sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:var(--stone);margin-bottom:0.5rem}
+  .detail-box p,.detail-box li{font-size:0.85rem;color:var(--text2);line-height:1.6}
+  .detail-box ul{padding-left:1rem}
+  .detail-box li{margin-bottom:0.3rem}
+  .cost-compare{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:1rem;margin-top:0.75rem}
+  .cost-bar-wrap{margin-top:0.4rem}
+  .cost-label{font-size:0.78rem;color:var(--text2);margin-bottom:0.2rem;display:flex;justify-content:space-between;font-family:Verdana,sans-serif}
+  .cost-bar-bg{background:#EEE;border-radius:4px;height:8px;overflow:hidden}
+  .cost-bar-fill{height:100%;border-radius:4px}
+  .bar-std{background:var(--pebble)}
+  .bar-bio{background:var(--moss)}
+
+  .filter-row{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+  .filter-btn{border:1px solid var(--border);background:white;border-radius:20px;padding:0.3rem 0.9rem;font-size:0.8rem;font-family:Verdana,sans-serif;cursor:pointer;transition:all 0.2s;color:var(--text2)}
+  .filter-btn:hover,.filter-btn.active{background:var(--forest);color:white;border-color:var(--forest)}
+
+  .checklist-section{margin-bottom:2rem}
+  .checklist-section h3{font-size:1rem;color:var(--forest);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:2px solid var(--mint)}
+  .check-item{display:flex;align-items:flex-start;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid var(--border)}
+  .check-item:last-child{border-bottom:none}
+  .check-item input[type=checkbox]{margin-top:3px;width:16px;height:16px;accent-color:var(--forest);cursor:pointer;flex-shrink:0}
+  .check-item label{font-size:0.875rem;color:var(--text2);cursor:pointer;line-height:1.5}
+  .check-item label span{font-size:0.75rem;color:var(--stone);display:block;margin-top:0.2rem;font-family:Verdana,sans-serif}
+  .check-item.done label{color:var(--stone);text-decoration:line-through}
+  .progress-bar{background:var(--border);border-radius:6px;height:10px;margin-bottom:0.5rem;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--moss),var(--forest));border-radius:6px;transition:width 0.4s}
+  .progress-text{font-size:0.8rem;font-family:Verdana,sans-serif;color:var(--stone);margin-bottom:1.5rem}
+
+  .cost-tool{background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem}
+  .cost-tool h3{font-size:1rem;color:var(--forest);margin-bottom:1.25rem}
+  .slider-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+  .slider-label{font-size:0.85rem;color:var(--text2);width:210px;flex-shrink:0;font-family:Verdana,sans-serif}
+  .slider-row input[type=range]{flex:1;accent-color:var(--forest)}
+  .slider-val{font-size:0.85rem;font-weight:bold;color:var(--forest);width:80px;text-align:right;font-family:Verdana,sans-serif}
+  .result-panel{background:var(--mint);border-radius:var(--radius);padding:1.25rem;margin-top:1.25rem}
+  .result-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+  .result-stat{text-align:center}
+  .result-num{font-size:1.6rem;font-weight:bold;color:var(--forest);display:block}
+  .result-lbl{font-size:0.72rem;font-family:Verdana,sans-serif;color:var(--sage);text-transform:uppercase;letter-spacing:0.06em}
+
+  .principle-card{background:white;border-left:4px solid var(--moss);border-radius:0 var(--radius) var(--radius) 0;padding:1.25rem;margin-bottom:1rem;border:1px solid var(--border);border-left-width:4px}
+  .principle-num{font-size:0.72rem;font-family:Verdana,sans-serif;color:var(--sage);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem}
+  .principle-title{font-size:1rem;font-weight:bold;color:var(--forest);margin-bottom:0.5rem}
+  .principle-desc{font-size:0.875rem;color:var(--text2);line-height:1.7}
+
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:1.5rem}
+  .stat-box{text-align:center;padding:1.25rem 1rem;background:var(--cream);border-radius:var(--radius);border:1px solid var(--border)}
+  .stat-num{font-size:2rem;font-weight:bold;color:var(--forest);display:block;font-family:Georgia,serif}
+  .stat-desc{font-size:0.78rem;color:var(--text2);font-family:Verdana,sans-serif;margin-top:0.4rem;line-height:1.5}
+
+  .glossary-item{border-bottom:1px solid var(--border);padding:1rem 0}
+  .glossary-item:last-child{border-bottom:none}
+  .glossary-term{font-size:1rem;font-weight:bold;color:var(--forest);margin-bottom:0.3rem}
+  .glossary-def{font-size:0.875rem;color:var(--text2);line-height:1.6}
+  .glossary-source{font-size:0.75rem;color:var(--stone);font-style:italic;margin-top:0.3rem;font-family:Verdana,sans-serif}
+
+  @media(max-width:620px){
+    .detail-row{grid-template-columns:1fr}
+    .result-grid{grid-template-columns:1fr}
+    .slider-label{width:140px;font-size:0.8rem}
+    .hero h1{font-size:1.4rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="hero">
+    <p class="hero-tag">ASID Foundation · Transform Research Grant · Morgan State University</p>
+    <h1>Biophilic Design Guidelines<br>for Residential Housing</h1>
+    <p class="hero-sub">Evidence-based strategies that integrate nature into homes — cost-effectively compared to standard builder-grade construction.</p>
+    <span class="hero-badge">For architects &nbsp;·&nbsp; interior designers &nbsp;·&nbsp; developers</span>
+  </div>
+
+  <nav class="nav-bar" role="tablist" aria-label="Guidebook sections">
+    <button class="nav-btn active" onclick="showTab('principles',this)" role="tab" aria-selected="true">Foundations</button>
+    <button class="nav-btn" onclick="showTab('strategies',this)" role="tab">Strategies</button>
+    <button class="nav-btn" onclick="showTab('checklist',this)" role="tab">Checklist</button>
+    <button class="nav-btn" onclick="showTab('cost',this)" role="tab">Cost Tool</button>
+    <button class="nav-btn" onclick="showTab('glossary',this)" role="tab">Glossary</button>
+  </nav>
+
+  <!-- FOUNDATIONS -->
+  <div class="section active" id="tab-principles" role="tabpanel">
+    <p class="section-intro">Biophilic design is grounded in the science of how humans relate to the natural world. These foundational principles, drawn from the Kellert et al. (2008) framework, organize every strategy in this guidebook.</p>
+    <div class="principle-card" style="border-left-color:var(--moss)">
+      <p class="principle-num">Category 01 &middot; Direct Experience of Nature</p>
+      <p class="principle-title">Contact with living systems and natural forces</p>
+      <p class="principle-desc">Direct encounters with nature — natural light, air movement, water, vegetation, and weather — provide the most powerful biophilic stimulus. In residential design, this category encompasses daylighting strategies, operable windows, indoor plants, living walls, water features, and connections to outdoor gardens. Research consistently links direct nature contact to reduced stress, improved mood, and faster physiological recovery.</p>
+    </div>
+    <div class="principle-card" style="border-left-color:var(--gold)">
+      <p class="principle-num">Category 02 &middot; Indirect Experience of Nature</p>
+      <p class="principle-title">Representation of nature in materials, form, and pattern</p>
+      <p class="principle-desc">Indirect biophilic experience occurs through natural materials, organic patterns, imagery of nature, and the visual quality of age and change in materials. Wood, stone, rattan, linen, and clay — and design patterns echoing natural geometries (fractals, spirals, flowing curves) — activate biophilic responses even in the absence of living systems. This category is often the most cost-accessible entry point for residential biophilic design.</p>
+    </div>
+    <div class="principle-card" style="border-left-color:var(--sky)">
+      <p class="principle-num">Category 03 &middot; Experience of Space and Place</p>
+      <p class="principle-title">Spatial configurations that echo natural environments</p>
+      <p class="principle-desc">Humans evolved preferences for certain spatial configurations — the ability to see without being seen (prospect and refuge), variable ceiling heights, layered spaces, and elements of mystery. These qualities can be designed into residential environments through varied ceiling heights, alcoves, semi-enclosed niches, thresholds, and orchestrated views. They are architectural moves, not material additions, and carry no additional construction cost when integrated at the design stage.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box"><span class="stat-num">15%</span><p class="stat-desc">Reduction in reported stress with daily nature views <em>(Ulrich, 1984)</em></p></div>
+      <div class="stat-box"><span class="stat-num">26%</span><p class="stat-desc">Improvement in cognitive function in daylit vs. artificially lit spaces <em>(Yin et al., 2018)</em></p></div>
+      <div class="stat-box"><span class="stat-num">30%</span><p class="stat-desc">Average energy savings from passive daylighting strategies <em>(U.S. DOE, 2023)</em></p></div>
+    </div>
+  </div>
+
+  <!-- STRATEGIES -->
+  <div class="section" id="tab-strategies" role="tabpanel">
+    <p class="section-intro">Fourteen evidence-based biophilic design strategies for residential housing. Each includes implementation guidance, simulation tools, and a cost comparison against the builder-grade baseline. Filter by category or cost level.</p>
+    <div class="filter-row" id="filter-row">
+      <button class="filter-btn active" onclick="filterCards('all',this)">All strategies</button>
+      <button class="filter-btn" onclick="filterCards('direct',this)">Direct nature</button>
+      <button class="filter-btn" onclick="filterCards('indirect',this)">Indirect nature</button>
+      <button class="filter-btn" onclick="filterCards('spatial',this)">Space &amp; place</button>
+      <button class="filter-btn" onclick="filterCards('low',this)">Low added cost</button>
+      <button class="filter-btn" onclick="filterCards('med',this)">Moderate cost</button>
+    </div>
+    <div class="card-grid" id="card-grid"></div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section" id="tab-checklist" role="tabpanel">
+    <p class="section-intro">A structured project checklist organized by design phase for tracking biophilic design integration from schematic design through construction administration.</p>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <p class="progress-text" id="prog-text">0 of 24 items complete</p>
+    <div id="checklist-container"></div>
+  </div>
+
+  <!-- COST TOOL -->
+  <div class="section" id="tab-cost" role="tabpanel">
+    <p class="section-intro">Estimate the cost premium of biophilic design relative to builder-grade baseline construction. Adjust parameters to see total added cost and projected value impact.</p>
+    <div class="cost-tool">
+      <h3>Project Parameters</h3>
+      <div class="slider-row">
+        <span class="slider-label">Number of units</span>
+        <input type="range" min="1" max="100" value="20" step="1" id="sl-units" oninput="calcCost()">
+        <span class="slider-val" id="v-units">20</span>
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Average unit size (sq ft)</span>
+        <input type="range" min="400" max="2000" value="900" step="50" id="sl-sqft" oninput="calcCost()">
+        <span class="slider-val" id="v-sqft">900</span>
+      </div>
+      <div class="slider-row">
+        <span class="slider-label">Biophilic strategy tier</span>
+        <input type="range" min="1" max="3" value="2" step="1" id="sl-tier" oninput="calcCost()">
+        <span class="slider-val" id="v-tier">Standard</span>
+      </div>
+    </div>
+    <div class="cost-tool">
+      <h3>Estimated Impact</h3>
+      <div class="result-panel">
+        <div class="result-grid">
+          <div class="result-stat"><span class="result-num" id="r-premium">$0</span><span class="result-lbl">Total cost premium</span></div>
+          <div class="result-stat"><span class="result-num" id="r-per-unit">$0</span><span class="result-lbl">Per unit cost</span></div>
+          <div class="result-stat"><span class="result-num" id="r-value">+0%</span><span class="result-lbl">Est. rental / sale premium</span></div>
+        </div>
+      </div>
+      <p style="font-size:0.78rem;color:var(--stone);margin-top:1rem;font-style:italic;font-family:Verdana,sans-serif">Estimates based on RSMeans 2025 data and comparable biophilic residential projects. For planning purposes only.</p>
+    </div>
+    <div class="cost-tool">
+      <h3>Strategy-by-Strategy Cost Comparison</h3>
+      <div id="cost-bars"></div>
+    </div>
+  </div>
+
+  <!-- GLOSSARY -->
+  <div class="section" id="tab-glossary" role="tabpanel">
+    <p class="section-intro">Key terms used throughout this guidebook, with definitions and primary source citations.</p>
+    <div id="glossary-container"></div>
+  </div>
+</div>
+
+<script>
+const STRATEGIES=[{id:"daylight",cat:"direct",icon:"☀️",iconColor:"gold",title:"Optimized Daylighting",summary:"Strategic window placement, glazing ratios, and light-shelf design to maximize natural light penetration without glare or heat gain.",costTier:"low",costNote:"$0–$8/sq ft premium over standard window packages when designed from schematic phase.",benefit:"Reduces artificial lighting load 30–50%; linked to improved circadian health and alertness.",howTo:"Use daylight autonomy analysis (Climate Studio or Ladybug/Honeybee) to model illuminance. Target sDA 300lx/50% or higher. Prioritize south-facing glazing in northern climates. Specify low-E glazing (U-value ≤0.30, SHGC 0.25–0.40). Incorporate light shelves to redirect daylight deeper into the floor plan.",tools:"Climate Studio · Ladybug/Honeybee · WINDOW (LBNL) · Rhinoceros 3D",builderBase:"Standard window package: $18–$25/sq ft of glazing area",biophilicCost:"High-performance glazing + light shelf: $22–$33/sq ft (15–25% premium)",barStd:40,barBio:52},{id:"ventilation",cat:"direct",icon:"🌿",iconColor:"green",title:"Natural Ventilation",summary:"Operable windows, cross-ventilation paths, and stack-effect design connecting residents to outdoor air, sound, and seasonal change.",costTier:"low",costNote:"Near zero premium when designed in; operable hardware adds $50–$150 per window.",benefit:"Reduces cooling loads; linked to reduced respiratory illness and improved perceived air quality.",howTo:"Design for cross-ventilation by aligning operable windows on opposite or adjacent facades. Locate operable areas at body level for airflow and high level for stack-effect exhaust. Verify airflow with Butterfly CFD or IES VE. Avoid fixed windows in kitchens, bathrooms, and primary living areas.",tools:"Butterfly (Ladybug) · IES VE · EnergyPlus",builderBase:"Fixed double-pane windows: $15–$20/sq ft",biophilicCost:"Operable double-pane: $18–$24/sq ft (10–20% premium)",barStd:35,barBio:42},{id:"plants",cat:"direct",icon:"🌱",iconColor:"green",title:"Indoor Vegetation",summary:"Built-in planters, integrated planting beds, and design details that make greenery a permanent architectural feature.",costTier:"low",costNote:"$200–$800 per unit for built-in planters and irrigation rough-in.",benefit:"Shown to reduce cortisol by up to 37% in occupancy studies; improves air quality markers.",howTo:"Specify built-in planter boxes at windowsills, room dividers, and entries. Provide recessed drainage pan with floor drain rough-in. Select species for unit light conditions: pothos, snake plant, ZZ plant, and monstera for low-light. In common areas, specify self-watering systems.",tools:"No simulation required; coordinate with MEP for drainage rough-in",builderBase:"No landscape allowance in typical residential units: $0",biophilicCost:"Built-in planters + drainage rough-in: $200–$800/unit",barStd:0,barBio:25},{id:"water",cat:"direct",icon:"💧",iconColor:"sky",title:"Water Features",summary:"Indoor wall fountains or exterior courtyard water elements that engage auditory and visual biophilic response.",costTier:"med",costNote:"$500–$3,000 per feature; most cost-effective in shared lobbies and courtyards.",benefit:"Flowing water sounds mask urban noise and are associated with reduced anxiety and improved focus.",howTo:"In units, specify wall-mounted water features with recirculating pump and GFCI outlet in entry or living areas. In multifamily common areas, prioritize courtyard water features. Avoid features that create humidity issues without adequate ventilation.",tools:"No simulation required; coordinate with plumbing",builderBase:"Standard lobby entry with no water feature: $0 line item",biophilicCost:"Recirculating water feature + rough-in: $800–$3,000/location",barStd:0,barBio:40},{id:"materials",cat:"indirect",icon:"🪵",iconColor:"terra",title:"Natural Materials",summary:"Wood, stone, clay, cork, rattan, and linen as primary finish materials — specified over synthetic alternatives of comparable performance.",costTier:"med",costNote:"Bamboo flooring is cost-comparable to LVP. Exposed wood beam adds $8–$15/LF over painted drywall.",benefit:"Natural material textures activate tactile and visual biophilic response; wood is linked to reduced heart rate and blood pressure in occupancy studies.",howTo:"Prioritize natural materials at high-touch surfaces and primary view planes: flooring, wall finish, cabinetry, countertops. Bamboo, cork, natural linoleum, and reclaimed wood are cost-competitive. Specify FSC-certified wood products. Avoid wood-look vinyl and faux stone — authentic material presence is required for the biophilic effect.",tools:"Material specification only; verify VOC compliance with WELL v2 Feature M7",builderBase:"LVP flooring: $3–$5/sq ft installed",biophilicCost:"Bamboo or cork flooring: $4–$7/sq ft (10–30% premium)",barStd:45,barBio:60},{id:"patterns",cat:"indirect",icon:"🌀",iconColor:"green",title:"Biomorphic Forms & Patterns",summary:"Organic geometry, fractal patterns, and flowing curves in architectural details, tile, textiles, and decorative elements.",costTier:"low",costNote:"Near zero premium when specified within standard tile, wallcovering, and textile budget lines.",benefit:"Fractal patterns at mid-range complexity (D=1.3–1.5) produce the strongest measurable stress-reduction response in occupancy studies.",howTo:"Specify tile in organic or botanical patterns at bathroom and kitchen backsplash within standard tile budget. Select window treatments, upholstery, and rugs with botanical patterns. Incorporate curved forms in millwork profiles and arched doorways. These are substitution decisions — not additions.",tools:"Design specification only",builderBase:"Standard ceramic tile: $4–$8/sq ft installed",biophilicCost:"Patterned organic tile: $6–$14/sq ft (10–30% premium)",barStd:50,barBio:62},{id:"imagery",cat:"indirect",icon:"🖼️",iconColor:"terra",title:"Nature Imagery & Art",summary:"High-quality photography, murals, and artwork depicting natural landscapes as designed elements in common areas and units.",costTier:"low",costNote:"$200–$800 per unit in common area art allowance — very high biophilic return on investment.",benefit:"Photorealistic nature imagery activates similar physiological responses to actual nature views when real views are unavailable.",howTo:"Specify large-format photographic prints (minimum 24\"×36\") depicting natural landscapes in corridors, lobbies, and living areas. Commission local artists for nature-themed murals in community spaces. Position botanical or landscape prints opposite the primary seating axis in units without exterior nature views.",tools:"Design specification only",builderBase:"Standard wall paint with no art allowance: $0",biophilicCost:"Large-format nature art + installation: $300–$1,200/location",barStd:0,barBio:28},{id:"prospect",cat:"spatial",icon:"🏔️",iconColor:"sky",title:"Prospect & Refuge",summary:"Spatial sequences providing open survey views (prospect) balanced by sheltered, protected zones (refuge).",costTier:"low",costNote:"Architectural design decision with negligible construction cost premium — integrated at the design stage.",benefit:"Spaces combining prospect and refuge are rated significantly more restorative and preferred across cultures in occupancy studies.",howTo:"Design open plan living areas with clear sightlines to exterior views (prospect). Offset with built-in alcoves, window seats with flanking cabinetry, or canopied areas (refuge). Apply lower ceiling height (7'–8') in refuge zones vs. living areas (9'–10') to reinforce spatial contrast. These are plan and section decisions, not material additions.",tools:"Spatial design decision; architectural section studies recommended",builderBase:"Flat open plan with uniform ceiling height: standard",biophilicCost:"Varied ceiling heights + alcove design: design fee impact only",barStd:100,barBio:103},{id:"mystery",cat:"spatial",icon:"🌙",iconColor:"green",title:"Mystery & Spatial Complexity",summary:"Spatial sequences that reward exploration — partial views, thresholds, layered planes, and revealed destinations.",costTier:"low",costNote:"Architectural planning decision; no construction premium when integrated at design stage.",benefit:"Environments with moderate visual complexity and elements of mystery are rated more interesting and restorative than fully legible, monotonous spaces.",howTo:"Design entry sequences that do not immediately reveal the full plan. Use screen walls or partial-height dividers to layer space and create partially occluded views. Position key views (window, fireplace, statement wall) so they are revealed through movement. Design hallway termini with a window or artwork destination view.",tools:"Spatial design decision; no simulation required",builderBase:"Straight-shot open plan corridor: standard",biophilicCost:"Layered spatial sequence: design fee impact only",barStd:100,barBio:102},{id:"biodynamic",cat:"direct",icon:"🌤️",iconColor:"gold",title:"Dynamic & Circadian Lighting",summary:"Tunable-white LED systems that shift in color temperature and intensity to mirror natural daylight cycles.",costTier:"med",costNote:"$150–$400 per unit over standard lighting package for tunable LED with circadian programming.",benefit:"Circadian-aligned lighting improves sleep quality, energy levels, and long-term health outcomes.",howTo:"Specify tunable-white LED fixtures in bedrooms and living areas — warm (2700K) in evening, cool (5000–6500K) in morning. Use smart lighting controllers (Lutron Caseta, Casambi, or equivalent) with circadian scheduling. Supplement with sheer window treatments that diffuse natural light. Ensure bedroom fixtures dim to ≤10fc for evening use.",tools:"AGi32 · Dialux Evo · Climate Studio Annual Sunlight Exposure",builderBase:"Standard LED recessed fixtures: $80–$130/fixture installed",biophilicCost:"Tunable-white LED + smart dimmer: $180–$280/fixture (50–100% premium)",barStd:45,barBio:80},{id:"outdoor",cat:"direct",icon:"🌳",iconColor:"green",title:"Outdoor Connection & Landscape",summary:"Private outdoor spaces, communal gardens, rooftop greenspace, and layered landscape design providing accessible nature contact.",costTier:"med",costNote:"Biophilic landscape reallocates within existing landscape budget rather than adding entirely new cost.",benefit:"Access to outdoor greenspace is one of the strongest predictors of residential satisfaction and mental health in urban housing research.",howTo:"Design private balconies at minimum 50 sq ft per unit. Provide communal garden space at minimum 30 sq ft per unit. Design landscape with layered planting: tree canopy, shrub layer, groundcover — not lawn only. Select native, climate-appropriate species. Ensure landscape is visible from within units.",tools:"Rhinoceros 3D + Ladybug for solar access analysis of outdoor spaces",builderBase:"Standard landscape package: $8–$20/sq ft of site area",biophilicCost:"Layered biophilic landscape: $12–$28/sq ft (20–40% premium on landscape budget)",barStd:55,barBio:72},{id:"acoustics",cat:"direct",icon:"🎶",iconColor:"sky",title:"Nature Sound & Acoustic Design",summary:"Acoustic planning that reduces urban noise intrusion and introduces nature-related sounds through design.",costTier:"low",costNote:"High-STC glazing premium may be offset by reduced HVAC noise mitigation requirements.",benefit:"Natural sounds (water, birdsong) are associated with rapid stress reduction; urban noise is linked to cardiovascular risk and sleep disruption.",howTo:"Specify high-STC window assemblies (STC ≥ 35 minimum; ≥ 40 in urban/highway adjacencies). Design outdoor spaces with running water and dense plantings that move in wind. Specify acoustic ceiling treatment in corridors (NRC ≥ 0.70). Consider nature sound-masking in lobbies. Place bedrooms away from primary traffic-facing exposures.",tools:"ODEON · Pachyderm Acoustic (Grasshopper)",builderBase:"Standard double-pane window: STC 28–32 / $15–$22/sq ft",biophilicCost:"High-STC acoustic glazing: STC 38–45 / $25–$35/sq ft",barStd:38,barBio:48},{id:"thermal",cat:"direct",icon:"🌡️",iconColor:"terra",title:"Thermal Delight & Variability",summary:"Designing for mild, predictable variation in indoor thermal conditions — warm sun patches, cool cross-breezes — rather than uniform mechanical conditioning.",costTier:"low",costNote:"Passive thermal strategies can reduce mechanical system sizing, resulting in potential net cost savings.",benefit:"Occupants in environments with mild thermal variability report higher satisfaction and stronger sense of well-being than those in uniformly conditioned spaces.",howTo:"Design south-facing glazing with properly sized overhangs for winter sun and summer shade — use Climate Studio to calculate overhang depth for your latitude. Specify radiant floor heating in primary living areas. Locate mechanical diffusers away from seating and sleeping zones. Design for mixed-mode conditioning: natural ventilation primary, mechanical backup.",tools:"EnergyPlus · Climate Studio · Ladybug thermal comfort analysis (PMV/UTCI)",builderBase:"Standard HVAC with uniform forced-air conditioning: $60–$80/sq ft",biophilicCost:"+ Radiant floor supplement: $8–$15/sq ft; passive solar design: design fee impact only",barStd:38,barBio:48},{id:"living-walls",cat:"direct",icon:"🌾",iconColor:"green",title:"Living Walls & Vertical Gardens",summary:"Panel-based or direct-planted living wall systems at building entries, lobbies, or exterior facades for large-scale nature contact.",costTier:"high",costNote:"$75–$200/sq ft installed; most cost-effective as a shared lobby or building entry amenity.",benefit:"Large-scale vegetation displays significantly impact perceived building quality and resident well-being; a high-visibility common area amenity.",howTo:"Specify modular felt-pocket or tray-based living wall systems (GSky, Sempergreen, or equivalent). Provide dedicated irrigation zone, drainage collection, and grow-light supplementation where daylight is insufficient. Select low-maintenance species: ferns, pothos, philodendron, and bromeliads for low-light. Include ongoing maintenance contract in project specifications.",tools:"No simulation required; coordinate with MEP for irrigation and drainage",builderBase:"Standard lobby wall finish (paint or tile): $15–$35/sq ft",biophilicCost:"Modular living wall system: $90–$220/sq ft (3–5× premium)",barStd:25,barBio:100}];
+
+const CHECKLIST=[{phase:"Schematic Design",items:[{text:"Orient primary living areas and bedrooms for optimal solar access and exterior views.",sub:"Prioritize south and east exposures; minimize north-facing bedrooms"},{text:"Establish glazing ratios targeting 20–30% of floor area for primary living spaces.",sub:"Verify with Climate Studio sDA analysis — target sDA 300lx/50%"},{text:"Design for cross-ventilation — align operable windows on opposing or adjacent facades.",sub:"Minimum two operable windows per unit on different facades"},{text:"Incorporate prospect-refuge spatial sequence in floor plan.",sub:"Open living area with view (prospect) + alcove or sheltered zone (refuge)"},{text:"Reserve communal landscape at minimum 30 sq ft per unit.",sub:"Ensure greenspace is visible from within units, not only accessible"},{text:"Design outdoor spaces — private balconies at minimum 50 sq ft per unit.",sub:"Prefer 80+ sq ft for functional outdoor living"}]},{phase:"Design Development",items:[{text:"Specify natural materials at primary floor finish (bamboo, cork, linoleum, hardwood).",sub:"Avoid wood-look LVP — substitution must use authentic material"},{text:"Design built-in planter details at windowsills and entry sequences.",sub:"Include recessed drainage pan and floor drain rough-in"},{text:"Specify tunable-white LED fixtures in bedrooms and living areas.",sub:"Target warm-cool range: 2700K evening through 5000–6500K morning"},{text:"Select tile, wallcovering, and textile patterns with organic/biomorphic forms.",sub:"Specify within existing allowance budgets — substitution, not addition"},{text:"Design varied ceiling heights: 7'–8' in refuge zones, 9'–10' in living areas.",sub:"Section decision — coordinate with structural team if applicable"},{text:"Plan water feature element at lobby or courtyard; provide plumbing rough-in.",sub:"Recirculating system; provide dedicated GFCI outlet and drain"}]},{phase:"Construction Documents",items:[{text:"Specify high-STC glazing (STC ≥ 35) for all exterior-facing windows.",sub:"Upgrade to acoustic laminate or triple-pane in noise-sensitive orientations"},{text:"Specify FSC-certified wood products for all wood-based finish materials.",sub:"Include FSC certification requirement in material specification section"},{text:"Include nature-themed art and photography in finish schedule.",sub:"Budget minimum $300/location; specify subject and quality requirements"},{text:"Specify acoustic ceiling treatment in corridors and common areas.",sub:"Target NRC ≥ 0.70 for corridor ceiling materials"},{text:"Specify smart lighting controls with circadian scheduling capability.",sub:"Lutron Caseta, Casambi, or equivalent with circadian scheduling API"},{text:"Confirm landscape specification includes layered planting — canopy, shrub, groundcover.",sub:"Native or climate-appropriate species preferred; include irrigation design"}]},{phase:"Construction Administration",items:[{text:"Review material submittals for natural material authenticity.",sub:"Reject wood-look synthetics; verify FSC certification documentation"},{text:"Inspect planter rough-in and drainage installation before flooring.",sub:"Verify waterproofing before planter box installation"},{text:"Witness daylight control system commissioning and circadian schedule verification.",sub:"Test morning (6500K) and evening (2700K dim) modes in an occupied unit"},{text:"Review landscape installation against layered planting specification.",sub:"Confirm species, spacing, and irrigation coverage before acceptance"},{text:"Conduct post-occupancy walkthrough at 30 and 90 days.",sub:"Document any material issues, drainage problems, or occupant feedback"},{text:"Compile project documentation for case study submission.",sub:"Photos, cost data, and occupant feedback for research dissemination"}]}];
+
+const GLOSSARY=[{term:"Biophilia",def:"The innate human tendency to affiliate with other living systems and natural processes, proposed by biologist Edward O. Wilson (1984) as an evolutionarily grounded dimension of human nature.",source:"Wilson, E.O. (1984). Biophilia. Harvard University Press."},{term:"Biophilic Design",def:"An evidence-based design approach incorporating natural elements, patterns, and processes into the built environment to support human health, well-being, and productivity. Systematized by Kellert et al. (2008).",source:"Kellert, S.R. et al. (2008). Biophilic Design. John Wiley & Sons."},{term:"Daylight Autonomy (sDA)",def:"The percentage of occupied floor area receiving adequate daylight illuminance (≥300 lux) for at least 50% of occupied hours annually. WELL v2 recommends sDA300lx/50% or higher for primary occupied spaces.",source:"IES LM-83-12; WELL Building Standard v2."},{term:"Builder-Grade",def:"Materials and construction methods representing the standard lowest-acceptable-specification baseline used in speculative residential development — selected primarily for cost efficiency and code compliance.",source:"RSMeans Building Construction Cost Data (2025)."},{term:"Prospect and Refuge",def:"A spatial theory proposing that humans prefer environments offering open views (prospect) and sheltered enclosure (refuge), rooted in evolutionary biology. First applied to design by Appleton (1975).",source:"Appleton, J. (1975). The Experience of Landscape. John Wiley & Sons."},{term:"Fractal Dimension (D)",def:"A measure of pattern complexity. Research demonstrates fractal patterns at D=1.3–1.5, typical of natural environments, produce the strongest measurable stress-reduction response in human observers.",source:"Taylor, R.P. et al. (2006). Nonlinear Dynamics in Psychology, 11."},{term:"Circadian Rhythm",def:"The approximately 24-hour internal biological clock regulating sleep-wake cycles and hormone production. Tunable lighting systems aligned to natural daylight cycles support circadian health and sleep quality.",source:"WELL Building Standard v2, Feature L07: Circadian Lighting Design."},{term:"Stack Effect Ventilation",def:"Passive natural ventilation driven by buoyancy of warm air rising and exiting through high-level openings while cooler air enters at low level. Requires vertically separated inlet and outlet openings.",source:"ASHRAE Handbook — Fundamentals, Chapter 26."},{term:"WELL Building Standard",def:"A performance-based building rating system focused on occupant health and well-being, maintained by the International WELL Building Institute (IWBI). WELL v2 includes specific biophilic design features B01–B04.",source:"IWBI. WELL v2 Documentation (2021)."},{term:"Volatile Organic Compounds (VOCs)",def:"Chemical compounds emitted as gases from construction and finishing materials including paints, adhesives, flooring, and composite wood. Low-VOC specifications are required for healthy indoor air quality.",source:"WELL v2 Feature A07: Low-Emitting Interiors."},{term:"FSC Certification",def:"Certification by the Forest Stewardship Council confirming that wood products originate from responsibly managed forests. FSC-certified products are a standard specification requirement for sustainable residential projects.",source:"Forest Stewardship Council. FSC Principles and Criteria (2015)."},{term:"Living Wall",def:"A planted wall system — either panel-based (modular felt-pocket or tray units) or direct-planted — in which vegetation grows vertically as a building or interior surface element.",source:"GSky Plant Systems; Sempergreen technical documentation."}];
+
+function showTab(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false')});
+  document.getElementById('tab-'+id).classList.add('active');
+  if(btn){btn.classList.add('active');btn.setAttribute('aria-selected','true')}
+}
+
+function filterCards(filter,btn){
+  document.querySelectorAll('#filter-row .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.strategy-card').forEach(card=>{
+    const c=card.dataset.cat,t=card.dataset.cost;
+    card.style.display=(filter==='all'||filter===c||filter===t)?'':'none';
+  });
+}
+
+function toggleCard(id){
+  const detail=document.getElementById('detail-'+id);
+  const card=document.getElementById('card-'+id);
+  const isOpen=detail.classList.contains('open');
+  document.querySelectorAll('.card-detail').forEach(d=>d.classList.remove('open'));
+  document.querySelectorAll('.strategy-card').forEach(c=>c.classList.remove('expanded'));
+  document.querySelectorAll('.card-toggle').forEach(t=>t.textContent='View details ↓');
+  if(!isOpen){
+    detail.classList.add('open');
+    card.classList.add('expanded');
+    document.querySelector('#card-'+id+' .card-toggle').textContent='Close ↑';
+  }
+}
+
+function buildCards(){
+  document.getElementById('card-grid').innerHTML=STRATEGIES.map(s=>`
+    <div class="strategy-card" id="card-${s.id}" data-cat="${s.cat}" data-cost="${s.costTier}">
+      <div class="card-header" onclick="toggleCard('${s.id}')">
+        <div class="card-icon ${s.iconColor}">${s.icon}</div>
+        <p class="card-title">${s.title}</p>
+        <p class="card-category">${s.cat==='direct'?'Direct nature experience':s.cat==='indirect'?'Indirect nature experience':'Space &amp; place'}</p>
+      </div>
+      <div class="card-summary">${s.summary}</div>
+      <div class="card-footer">
+        <span class="cost-badge ${s.costTier}">${s.costTier==='low'?'Low added cost':s.costTier==='med'?'Moderate cost':'Higher investment'}</span>
+        <span class="card-toggle" onclick="toggleCard('${s.id}')">View details ↓</span>
+      </div>
+      <div class="card-detail" id="detail-${s.id}">
+        <div class="detail-row">
+          <div class="detail-box"><h4>Well-being benefit</h4><p>${s.benefit}</p><br><h4>Simulation tools</h4><p>${s.tools}</p></div>
+          <div class="detail-box"><h4>Implementation guidance</h4><p>${s.howTo}</p></div>
+        </div>
+        <div class="cost-compare">
+          <h4 style="font-size:0.72rem;font-family:Verdana,sans-serif;text-transform:uppercase;letter-spacing:0.08em;color:var(--stone);margin-bottom:0.75rem">Cost comparison</h4>
+          <div class="cost-bar-wrap">
+            <div class="cost-label"><span>Builder-grade baseline</span><span>${s.builderBase}</span></div>
+            <div class="cost-bar-bg"><div class="cost-bar-fill bar-std" style="width:${s.barStd}%"></div></div>
+          </div>
+          <div class="cost-bar-wrap" style="margin-top:0.5rem">
+            <div class="cost-label"><span>Biophilic approach</span><span style="color:var(--moss)">${s.biophilicCost}</span></div>
+            <div class="cost-bar-bg"><div class="cost-bar-fill bar-bio" style="width:${Math.min(s.barBio,100)}%"></div></div>
+          </div>
+          <p style="font-size:0.75rem;color:var(--stone);margin-top:0.75rem;font-style:italic">${s.costNote}</p>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildChecklist(){
+  let html='',total=0;
+  CHECKLIST.forEach((section,si)=>{
+    html+=`<div class="checklist-section"><h3>${section.phase}</h3>`;
+    section.items.forEach((item,ii)=>{
+      const id=`ck-${si}-${ii}`;
+      html+=`<div class="check-item" id="wrap-${id}"><input type="checkbox" id="${id}" onchange="updateProgress()"><label for="${id}">${item.text}<span>${item.sub}</span></label></div>`;
+      total++;
+    });
+    html+='</div>';
+  });
+  document.getElementById('checklist-container').innerHTML=html;
+  window._totalChecks=total;
+}
+
+function updateProgress(){
+  const checked=document.querySelectorAll('#checklist-container input:checked').length;
+  const total=window._totalChecks||24;
+  document.getElementById('prog-fill').style.width=Math.round(checked/total*100)+'%';
+  document.getElementById('prog-text').textContent=`${checked} of ${total} items complete`;
+  document.querySelectorAll('.check-item').forEach(item=>{
+    item.classList.toggle('done',item.querySelector('input').checked);
+  });
+}
+
+function calcCost(){
+  const units=parseInt(document.getElementById('sl-units').value);
+  const sqft=parseInt(document.getElementById('sl-sqft').value);
+  const tier=parseInt(document.getElementById('sl-tier').value);
+  document.getElementById('v-units').textContent=units;
+  document.getElementById('v-sqft').textContent=sqft.toLocaleString();
+  document.getElementById('v-tier').textContent=['Minimal','Standard','Comprehensive'][tier-1];
+  const perSqFt=[2.5,6,12][tier-1];
+  document.getElementById('r-premium').textContent='$'+Math.round(units*sqft*perSqFt).toLocaleString();
+  document.getElementById('r-per-unit').textContent='$'+Math.round(sqft*perSqFt).toLocaleString();
+  document.getElementById('r-value').textContent='+'+[3,7,12][tier-1]+'%';
+}
+
+function buildCostBars(){
+  const items=[
+    {label:"Optimized daylighting",std:22,bio:27,unit:"/sq ft glazing"},
+    {label:"Natural ventilation windows",std:17,bio:21,unit:"/sq ft"},
+    {label:"Indoor vegetation + planters",std:0,bio:500,unit:"/unit"},
+    {label:"Natural floor materials",std:4,bio:6,unit:"/sq ft"},
+    {label:"Tunable LED lighting",std:105,bio:220,unit:"/fixture"},
+    {label:"High-STC acoustic glazing",std:20,bio:28,unit:"/sq ft"},
+    {label:"Biomorphic tile patterns",std:6,bio:10,unit:"/sq ft"},
+  ];
+  const maxVal=550;
+  document.getElementById('cost-bars').innerHTML=items.map(item=>`
+    <div style="margin-bottom:1rem">
+      <div style="font-size:0.85rem;color:var(--text2);margin-bottom:0.35rem;font-family:Verdana,sans-serif">${item.label} <span style="color:var(--stone);font-size:0.75rem">${item.unit}</span></div>
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.2rem">
+        <span style="font-size:0.75rem;color:var(--stone);width:70px;text-align:right">Baseline</span>
+        <div style="flex:1;background:var(--border);border-radius:4px;height:8px"><div style="width:${Math.round(item.std/maxVal*100)}%;height:100%;background:var(--pebble);border-radius:4px"></div></div>
+        <span style="font-size:0.75rem;color:var(--stone);width:50px">$${item.std}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.5rem">
+        <span style="font-size:0.75rem;color:var(--moss);width:70px;text-align:right">Biophilic</span>
+        <div style="flex:1;background:var(--border);border-radius:4px;height:8px"><div style="width:${Math.round(item.bio/maxVal*100)}%;height:100%;background:var(--moss);border-radius:4px"></div></div>
+        <span style="font-size:0.75rem;color:var(--moss);width:50px">$${item.bio}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildGlossary(){
+  document.getElementById('glossary-container').innerHTML=GLOSSARY.map(t=>`
+    <div class="glossary-item">
+      <p class="glossary-term">${t.term}</p>
+      <p class="glossary-def">${t.def}</p>
+      <p class="glossary-source">${t.source}</p>
+    </div>
+  `).join('');
+}
+
+buildCards();
+buildChecklist();
+buildCostBars();
+buildGlossary();
+calcCost();
+</script>
+</body>
+</html>
